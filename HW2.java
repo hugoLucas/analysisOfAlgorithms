@@ -3,7 +3,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class Main {
+/*
+ * Written by Hugo Flores for CSC 501 - Analysis of Algorithms, Spring 2018
+ */
+
+public class HW2 {
 
     // Indices of user inputs in user input array
     private static int N_INDEX = 0;
@@ -26,6 +30,7 @@ public class Main {
             HashMap<Integer, ArrayList<Interval>> partition = intervalPartitioner(intervalList);
 
             // Print results
+            System.out.println("Intervals printed in the following format: <Interval Number> Start Time -> End Time");
             printScheduleResults(schedule);
             printPartitionResults(partition);
 
@@ -186,7 +191,7 @@ public class Main {
      *                      times
      * @return              an array list of copied Interval objects sorted in the appropriate order
      */
-    private static ArrayList<Main.Interval> makeCopy(ArrayList<Interval> list, boolean sortByEnd){
+    private static ArrayList<HW2.Interval> makeCopy(ArrayList<Interval> list, boolean sortByEnd){
         ArrayList<Interval> intervalCopy = new ArrayList<>(list.size());
         for (Interval i: list)
             intervalCopy.add(i.cloneInterval(sortByEnd));
@@ -231,7 +236,8 @@ public class Main {
         Set keys = partition.keySet();
 
         System.out.println("Partition Results: ");
-        for(Object key: keys){
+        for(Object keyObj: keys){
+            Integer key = (Integer) keyObj;
             ArrayList<Interval> results = partition.get(key);
             System.out.print("Label " + key + ": ");
             for (Interval i: results)
@@ -243,7 +249,7 @@ public class Main {
     /**
      * Abstraction of each randomly generated interval
      */
-    static class Interval implements Comparable{
+    static class Interval implements Comparable<Interval>{
 
         private int intervalLabel;
         private int startTime;
@@ -302,16 +308,10 @@ public class Main {
         }
 
         @Override
-        public int compareTo(Object o) {
-            if (!(o instanceof Interval))
-                throw new ClassCastException("This object is not an Interval!");
-            else{
-                Interval obj = (Interval) o;
-                if(this.sortByEndTime)
-                    return Integer.compare(this.endTime, obj.getEndTime());
-                else
-                    return Integer.compare(this.startTime, obj.getStartTime());
-            }
-        }
+        public int compareTo(Interval interval) {
+            if(this.sortByEndTime)
+                return Integer.compare(this.endTime, interval.getEndTime());
+            else
+                return Integer.compare(this.startTime, interval.getStartTime());        }
     }
 }
